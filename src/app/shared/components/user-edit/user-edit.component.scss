@@ -1,0 +1,24 @@
+@import '/src/styles/styles.scss';
+
+mat-dialog-container {
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+}
+
+mat-dialog-content p {
+  margin-bottom: 10px;
+}
+
+mat-dialog-actions {
+  display: flex;
+  margin-top: 20px;
+  width: 50%;
+  margin-left: auto;
+
+  button {
+    min-width: 100px;
+    margin-left: 10px;
+  }
+}

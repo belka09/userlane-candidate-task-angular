@@ -8,3 +8,13 @@ body {
     padding: 0;
     overflow: hidden;
 }
+
+.dialog-container {
+    width: 600px;
+    max-width: 95vw !important;
+    border-radius: 8px;
+
+    @media (max-width: 600px) {
+        width: 95vw;
+    }
+}

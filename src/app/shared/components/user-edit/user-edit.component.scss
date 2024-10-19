@@ -22,3 +22,27 @@ mat-dialog-actions {
     margin-left: 10px;
   }
 }
+
+.form-container {
+  display: grid;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+
+  .form-field {
+    flex: 1 1 50%;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+
+    .form-field {
+      flex: 1 1 100%;
+    }
+  }
+}

@@ -1,14 +1,59 @@
 <div mat-dialog-content>
-    <p><strong>First Name:</strong> {{ data.user.firstName }}</p>
-    <p><strong>Last Name:</strong> {{ data.user.lastName }}</p>
-    <p><strong>Email:</strong> {{ data.user.email }}</p>
-    <p><strong>Birth Date:</strong> {{ data.user.birthDate | date }}</p>
-    <p><strong>Role:</strong> {{ data.user.role }}</p>
+    <form [formGroup]="userForm"
+        class="form-container">
+        <div class="form-row">
+            <mat-form-field class="form-field">
+                <mat-label>First Name</mat-label>
+                <input matInput
+                    formControlName="firstName" />
+            </mat-form-field>
+
+            <mat-form-field class="form-field">
+                <mat-label>Last Name</mat-label>
+                <input matInput
+                    formControlName="lastName" />
+            </mat-form-field>
+        </div>
+
+        <div class="form-row">
+            <mat-form-field class="form-field">
+                <mat-label>Email</mat-label>
+                <input matInput
+                    formControlName="email" />
+            </mat-form-field>
+        </div>
+
+        <div class="form-row">
+            <mat-form-field class="form-field">
+                <mat-label>Birth Date</mat-label>
+                <input matInput
+                    [matDatepicker]="picker"
+                    formControlName="birthDate" />
+                <mat-datepicker-toggle matSuffix
+                    [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="form-field">
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role">
+                    <mat-option value="admin">Admin</mat-option>
+                    <mat-option value="moderator">Moderator</mat-option>
+                    <mat-option value="user">User</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </form>
 </div>
+
 <div mat-dialog-actions
     [align]="'end'">
     <button mat-button
         (click)="onClose()">Cancel</button>
     <button mat-raised-button
-        color="primary">Save</button>
+        color="primary"
+        (click)="onSave()"
+        [disabled]="userForm.invalid">
+        Save
+    </button>
 </div>

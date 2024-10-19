@@ -71,7 +71,7 @@ export class UsersTableComponent implements OnInit {
 
   onEdit(user: User): void {
     const dialogRef = this.dialog.open(UserEditComponent, {
-      width: '600px',
+      panelClass: 'dialog-container',
       data: { user },
     });
 

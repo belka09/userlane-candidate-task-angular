@@ -16,25 +16,18 @@ export const initialState: UsersState = adapter.getInitialState({
 
 export const usersReducer = createReducer(
   initialState,
-  on(UsersActions.loadUsersSuccess, (state, { users }) =>
-    adapter.setAll(users, {
+  on(UsersActions.loadUsersSuccess, (state, { users }) => {
+    return adapter.setAll(users, {
       ...state,
       loading: false,
-    })
-  ),
+    });
+  }),
 
-  on(UsersActions.loadUsersFailure, (state, { error }) => ({
-    ...state,
-    loading: false,
-    error,
-  })),
+  on(UserDetailsActions.updateUser, (state, { user }) => {
+    return adapter.updateOne({ id: user.id, changes: user }, { ...state });
+  }),
 
-  on(UsersActions.filterUsers, (state) => ({
-    ...state,
-  })),
-
-  on(UserDetailsActions.selectUser, (state, { userId }) => ({
-    ...state,
-    selectedUserId: userId,
-  }))
+  on(UserDetailsActions.updateUserSuccess, (state, { user }) => {
+    return adapter.updateOne({ id: user.id, changes: user }, { ...state });
+  })
 );

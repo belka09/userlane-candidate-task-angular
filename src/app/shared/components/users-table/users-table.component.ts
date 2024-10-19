@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { User } from '../../models/user';
 import { MatTableModule } from '@angular/material/table';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,7 +17,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserEditComponent } from '../user-edit/user-edit.component';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { UsersActions } from 'src/app/core/store/users/users.action';
+import {
+  UserDetailsActions,
+  UsersActions,
+} from 'src/app/core/store/users/users.action';
 import {
   selectAllUsers,
   selectCurrentUser,
@@ -32,7 +40,7 @@ import {
     MatDialogModule,
   ],
   templateUrl: './users-table.component.html',
-  styleUrl: './users-table.component.scss',
+  styleUrls: ['./users-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersTableComponent implements OnInit {
@@ -51,7 +59,11 @@ export class UsersTableComponent implements OnInit {
   users$: Observable<User[]> | undefined;
   selectedUser$: Observable<User | undefined> | undefined;
 
-  constructor(public dialog: MatDialog, private store: Store) {}
+  constructor(
+    public dialog: MatDialog,
+    private store: Store,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.getAllUsers();
@@ -59,9 +71,7 @@ export class UsersTableComponent implements OnInit {
     this.selectedUser$ = this.store.pipe(select(selectCurrentUser));
 
     this.users$.subscribe((users: User[]) => {
-      this.dataSource = new MatTableDataSource(users);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.updateTableData(users);
     });
   }
 
@@ -76,7 +86,22 @@ export class UsersTableComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed', result);
+      if (result) {
+        this.store.dispatch(
+          UserDetailsActions.updateUser({ user: { ...user, ...result } })
+        );
+      }
     });
+  }
+
+  private updateTableData(users: User[]): void {
+    this.dataSource.data = users;
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+    this.cdr.markForCheck();
   }
 }

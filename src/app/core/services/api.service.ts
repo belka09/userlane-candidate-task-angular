@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { User } from '../shared/models/user';
+import { User } from '../../shared/models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +12,10 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}`);
+  fetchUsers(): Observable<User[]> {
+    return this.http
+      .get<{ users: User[] }>(`${this.apiUrl}`)
+      .pipe(map((response) => response.users));
   }
 
   getUserById(userId: number): Observable<User> {

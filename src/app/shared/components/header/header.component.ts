@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { LocalStorageService } from 'src/app/core/localStorage.service';
+import { LocalStorageService } from 'src/app/core/services/localStorage.service';
 
 @Component({
   selector: 'app-header',

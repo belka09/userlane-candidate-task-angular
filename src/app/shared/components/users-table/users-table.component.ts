@@ -1,22 +1,22 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { User } from '../../models/user';
-import { ApiService } from 'src/app/core/api.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserEditComponent } from '../user-edit/user-edit.component';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { UsersActions } from 'src/app/core/store/users/users.action';
+import {
+  selectAllUsers,
+  selectCurrentUser,
+} from 'src/app/core/store/users/users.selector';
 
 @Component({
   selector: 'app-users-table',
@@ -36,8 +36,6 @@ import { UserEditComponent } from '../user-edit/user-edit.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersTableComponent implements OnInit {
-  private _liveAnnouncer = inject(LiveAnnouncer);
-
   displayedColumns: string[] = [
     'firstName',
     'email',
@@ -50,15 +48,25 @@ export class UsersTableComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) {}
+  users$: Observable<User[]> | undefined;
+  selectedUser$: Observable<User | undefined> | undefined;
+
+  constructor(public dialog: MatDialog, private store: Store) {}
 
   ngOnInit(): void {
-    this.apiService.getUsers().subscribe((response: any) => {
-      this.dataSource = new MatTableDataSource(response.users);
+    this.getAllUsers();
+    this.users$ = this.store.pipe(select(selectAllUsers));
+    this.selectedUser$ = this.store.pipe(select(selectCurrentUser));
+
+    this.users$.subscribe((users: User[]) => {
+      this.dataSource = new MatTableDataSource(users);
       this.dataSource.paginator = this.paginator;
-      this.sort.disableClear = true;
       this.dataSource.sort = this.sort;
     });
+  }
+
+  private getAllUsers() {
+    this.store.dispatch(UsersActions.loadUsers());
   }
 
   onEdit(user: User): void {

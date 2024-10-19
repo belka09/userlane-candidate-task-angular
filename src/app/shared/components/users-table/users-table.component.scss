@@ -1,22 +1,15 @@
 @import '/src/styles/styles.scss';
 
-.user-table-container {
-  .table-wrapper {
-    background: rgba($white, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 8px;
-    padding: 16px;
-    margin: 16px 0;
-    box-shadow: 0 4px 8px $gray;
-  }
+:host {
+  width: 100%;
+}
 
+.user-table-container {
   table {
     width: 100%;
     border-collapse: collapse;
 
     th {
-      background-color: $orange;
-      color: $white;
       font-weight: bold;
       text-align: left;
       padding: 12px;

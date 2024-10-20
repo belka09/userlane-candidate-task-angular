@@ -7,17 +7,13 @@ export const UsersActions = createActionGroup({
     'Load Users': emptyProps(),
     'Load Users Success': props<{ users: User[] }>(),
     'Load Users Failure': props<{ error: string }>(),
-    'Clear Users Cache': emptyProps(),
-    'Update User': props<{ user: User }>(),
-  },
-});
 
-export const UserDetailsActions = createActionGroup({
-  source: 'User Details',
-  events: {
-    'Select User': props<{ userId: string }>(),
     'Update User': props<{ user: User }>(),
     'Update User Success': props<{ user: User }>(),
     'Update User Failure': props<{ error: string }>(),
+
+    'Delete User': props<{ userId: number }>(),
+    'Delete User Success': props<{ userId: number }>(),
+    'Delete User Failure': props<{ error: string }>(),
   },
 });

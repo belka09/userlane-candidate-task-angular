@@ -111,7 +111,7 @@ export class UsersTableComponent implements OnInit {
   }
 
   public onRemove(user: User): void {
-    console.log('Remove', user);
+    this.store.dispatch(UsersActions.deleteUser({ userId: user.id }));
   }
 
   public updateTableData(users: User[]): void {

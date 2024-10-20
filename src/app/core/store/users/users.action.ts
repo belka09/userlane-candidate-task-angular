@@ -7,8 +7,8 @@ export const UsersActions = createActionGroup({
     'Load Users': emptyProps(),
     'Load Users Success': props<{ users: User[] }>(),
     'Load Users Failure': props<{ error: string }>(),
-    'Filter Users': props<{ filterType: string; filterValue: string }>(),
-    'Pagination Changed': props<{ page: number; offset: number }>(),
+    'Clear Users Cache': emptyProps(),
+    'Update User': props<{ user: User }>(),
   },
 });
 

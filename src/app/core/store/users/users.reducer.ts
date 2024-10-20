@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { UsersState } from './users.model';
 import { createEntityAdapter, EntityAdapter } from '@ngrx/entity';
-import { UserDetailsActions, UsersActions } from './users.action';
+import { UsersActions } from './users.action';
 import { User } from 'src/app/shared/models/user';
 
 export const featureKey = 'users';
@@ -12,22 +12,41 @@ export const initialState: UsersState = adapter.getInitialState({
   selectedUserId: null,
   loading: false,
   error: null,
+  isCached: false,
 });
 
 export const usersReducer = createReducer(
   initialState,
+  on(UsersActions.loadUsers, (state) => ({
+    ...state,
+    loading: true,
+  })),
   on(UsersActions.loadUsersSuccess, (state, { users }) => {
-    return adapter.setAll(users, {
-      ...state,
-      loading: false,
-    });
+    if (users.length > 0) {
+      return adapter.setAll(users, {
+        ...state,
+        loading: false,
+        isCached: true,
+      });
+    } else {
+      return {
+        ...state,
+        loading: false,
+        isCached: false,
+      };
+    }
   }),
-
-  on(UserDetailsActions.updateUser, (state, { user }) => {
-    return adapter.updateOne({ id: user.id, changes: user }, { ...state });
-  }),
-
-  on(UserDetailsActions.updateUserSuccess, (state, { user }) => {
-    return adapter.updateOne({ id: user.id, changes: user }, { ...state });
-  })
+  on(UsersActions.loadUsersFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+  on(UsersActions.clearUsersCache, (state) => ({
+    ...state,
+    users: [],
+    isCached: false,
+  })),
+  on(UsersActions.updateUser, (state, { user }) =>
+    adapter.updateOne({ id: user.id, changes: user }, state)
+  )
 );

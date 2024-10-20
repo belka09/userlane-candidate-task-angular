@@ -30,3 +30,8 @@ export const selectCurrentUser = createSelector(
   selectCurrentUserId,
   (userEntities, userId) => (userId ? userEntities[userId] : emptyUser)
 );
+
+export const selectIsCached = createSelector(
+  selectUsersState,
+  (state) => state.isCached
+);

@@ -31,7 +31,7 @@ export class HeaderComponent {
     this.applyTheme();
   }
 
-  private applyTheme(): void {
+  applyTheme(): void {
     if (this.isDarkTheme) {
       document.documentElement.setAttribute('theme', 'dark');
     } else {

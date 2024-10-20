@@ -17,13 +17,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserEditComponent } from '../user-edit/user-edit.component';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import {
-  UserDetailsActions,
-  UsersActions,
-} from 'src/app/core/store/users/users.action';
+import { UsersActions } from 'src/app/core/store/users/users.action';
 import {
   selectAllUsers,
-  selectCurrentUser,
+  selectIsCached,
 } from 'src/app/core/store/users/users.selector';
 
 @Component({
@@ -66,17 +63,17 @@ export class UsersTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAllUsers();
-    this.users$ = this.store.pipe(select(selectAllUsers));
-    this.selectedUser$ = this.store.pipe(select(selectCurrentUser));
+    this.store.pipe(select(selectIsCached)).subscribe((isCached) => {
+      if (!isCached) {
+        this.store.dispatch(UsersActions.loadUsers());
+      }
+    });
 
-    this.users$.subscribe((users: User[]) => {
+    this.users$ = this.store.pipe(select(selectAllUsers));
+
+    this.users$.subscribe((users) => {
       this.updateTableData(users);
     });
-  }
-
-  private getAllUsers() {
-    this.store.dispatch(UsersActions.loadUsers());
   }
 
   onEdit(user: User): void {
@@ -87,14 +84,13 @@ export class UsersTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.store.dispatch(
-          UserDetailsActions.updateUser({ user: { ...user, ...result } })
-        );
+        const updatedUser = { ...user, ...result };
+        this.store.dispatch(UsersActions.updateUser({ user: updatedUser }));
       }
     });
   }
 
-  private updateTableData(users: User[]): void {
+  updateTableData(users: User[]): void {
     this.dataSource.data = users;
     if (this.paginator) {
       this.dataSource.paginator = this.paginator;

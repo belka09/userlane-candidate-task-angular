@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,6 +23,7 @@ import {
   selectAllUsers,
   selectIsCached,
 } from 'src/app/core/store/users/users.selector';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-users-table',
@@ -32,7 +34,9 @@ import {
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     UserEditComponent,
     MatDialogModule,
   ],
@@ -75,6 +79,21 @@ export class UsersTableComponent implements OnInit {
     this.users$.subscribe((users) => {
       this.updateTableData(users);
     });
+
+    this.dataSource.filterPredicate = (data: User, filter: string) => {
+      const dataStr =
+        `${data.firstName} ${data.lastName} ${data.email} ${data.role}`.toLowerCase();
+      return dataStr.includes(filter.trim().toLowerCase());
+    };
+  }
+
+  public applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   public onEdit(user: User): void {

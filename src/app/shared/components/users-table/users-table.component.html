@@ -1,5 +1,12 @@
 <section class="user-table-container">
     <div class="table-wrapper">
+        <mat-form-field appearance="fill">
+            <mat-label>Search</mat-label>
+            <input matInput
+                (keyup)="applyFilter($event)"
+                placeholder="Search all fields">
+        </mat-form-field>
+
         <table mat-table
             [dataSource]="dataSource"
             matSort

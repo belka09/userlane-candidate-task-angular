@@ -9,6 +9,12 @@
     width: 100%;
     border-collapse: collapse;
     white-space: nowrap;
+    overflow: auto;
+    display: inline-table;
+
+    @media (max-width: 600px) {
+      display: inline-block;
+    }
 
     th {
       font-weight: bold;

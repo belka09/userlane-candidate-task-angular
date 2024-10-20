@@ -42,11 +42,12 @@ import {
 })
 export class UsersTableComponent implements OnInit {
   displayedColumns: string[] = [
+    'edit',
     'firstName',
     'email',
     'birthDate',
     'role',
-    'edit',
+    'remove',
   ];
   dataSource = new MatTableDataSource<User>([]);
 
@@ -76,7 +77,7 @@ export class UsersTableComponent implements OnInit {
     });
   }
 
-  onEdit(user: User): void {
+  public onEdit(user: User): void {
     const dialogRef = this.dialog.open(UserEditComponent, {
       panelClass: 'dialog-container',
       data: { user },
@@ -90,7 +91,11 @@ export class UsersTableComponent implements OnInit {
     });
   }
 
-  updateTableData(users: User[]): void {
+  public onRemove(user: User): void {
+    console.log('Remove', user);
+  }
+
+  public updateTableData(users: User[]): void {
     this.dataSource.data = users;
     if (this.paginator) {
       this.dataSource.paginator = this.paginator;

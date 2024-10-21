@@ -38,6 +38,20 @@ export class UsersEffects {
     )
   );
 
+  addUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.addUser),
+      mergeMap(({ user }) =>
+        this.apiService.createUser(user).pipe(
+          map(() => UsersActions.loadUsers()),
+          catchError((error) =>
+            of(UsersActions.addUserFailure({ error: error.message }))
+          )
+        )
+      )
+    )
+  );
+
   deleteUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UsersActions.deleteUser),

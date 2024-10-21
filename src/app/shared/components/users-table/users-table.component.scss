@@ -5,6 +5,22 @@
 }
 
 .user-table-container {
+  .header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .search-field {
+    @media (max-width: 600px) {
+      flex: 1;
+    }
+  }
+
+  .add-button {
+    margin-left: 10px;
+  }
+
   table {
     width: 100%;
     height: 422px;

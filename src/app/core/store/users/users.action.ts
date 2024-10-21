@@ -15,5 +15,9 @@ export const UsersActions = createActionGroup({
     'Delete User': props<{ userId: number }>(),
     'Delete User Success': props<{ userId: number }>(),
     'Delete User Failure': props<{ error: string }>(),
+
+    'Add User': props<{ user: User }>(),
+    'Add User Success': props<{ user: User }>(),
+    'Add User Failure': props<{ error: string }>(),
   },
 });

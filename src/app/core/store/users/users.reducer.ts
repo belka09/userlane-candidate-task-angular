@@ -44,6 +44,20 @@ export const usersReducer = createReducer(
     error,
   })),
 
+  // Add user reducers
+  on(UsersActions.addUser, (state) => ({
+    ...state,
+    loading: true,
+  })),
+  on(UsersActions.addUserSuccess, (state, { user }) =>
+    adapter.addOne(user, { ...state, loading: false })
+  ),
+  on(UsersActions.addUserFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
   // Update user reducers
   on(UsersActions.updateUser, (state) => ({
     ...state,

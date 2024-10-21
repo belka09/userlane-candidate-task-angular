@@ -117,10 +117,39 @@ export class UsersTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const updatedUser = { ...user, ...result };
-        console.log(updatedUser);
         this.store.dispatch(UsersActions.updateUser({ user: updatedUser }));
       }
     });
+  }
+
+  public onAddUser(): void {
+    const dialogRef = this.dialog.open(UserEditComponent, {
+      panelClass: 'dialog-container',
+      data: { user: this.getEmptyUser() },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const newUser = { ...result, id: this.generateNewId().toString() };
+        this.store.dispatch(UsersActions.addUser({ user: newUser }));
+      }
+    });
+  }
+
+  private getEmptyUser(): User {
+    return {
+      id: 0,
+      firstName: '',
+      lastName: '',
+      email: '',
+      role: 'user',
+      status: 'Active',
+      dob: '',
+    };
+  }
+
+  private generateNewId(): number {
+    return Math.max(...this.dataSource.data.map((user) => user.id)) + 1;
   }
 
   public onRemove(user: User): void {

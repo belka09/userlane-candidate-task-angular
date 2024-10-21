@@ -62,6 +62,7 @@ export class UserEditComponent {
       email: [data.user.email, [Validators.required, Validators.email]],
       dob: [this.parseDate(data.user.dob), Validators.required],
       role: [data.user.role, Validators.required],
+      status: [data.user.status, Validators.required],
     });
   }
 

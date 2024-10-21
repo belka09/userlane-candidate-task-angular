@@ -90,6 +90,13 @@ export class UsersTableComponent implements OnInit {
         `${data.firstName} ${data.lastName} ${data.email} ${data.role}`.toLowerCase();
       return dataStr.includes(filter.trim().toLowerCase());
     };
+
+    this.dataSource.sortingDataAccessor = (user: User, property: string) => {
+      if (property === 'birthDate') {
+        return new Date(user.dob);
+      }
+      return (user as any)[property];
+    };
   }
 
   public applyFilter(event: Event) {
@@ -110,6 +117,7 @@ export class UsersTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const updatedUser = { ...user, ...result };
+        console.log(updatedUser);
         this.store.dispatch(UsersActions.updateUser({ user: updatedUser }));
       }
     });

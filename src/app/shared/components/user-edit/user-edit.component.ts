@@ -60,7 +60,7 @@ export class UserEditComponent {
       firstName: [data.user.firstName, Validators.required],
       lastName: [data.user.lastName, Validators.required],
       email: [data.user.email, [Validators.required, Validators.email]],
-      birthDate: [this.parseDate(data.user.dob), Validators.required],
+      dob: [this.parseDate(data.user.dob), Validators.required],
       role: [data.user.role, Validators.required],
     });
   }

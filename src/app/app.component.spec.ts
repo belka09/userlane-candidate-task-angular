@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { CommonModule } from '@angular/common';
+import { provideMockStore } from '@ngrx/store/testing';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -18,6 +19,7 @@ describe('AppComponent', () => {
         FooterComponent,
         AppComponent,
       ],
+      providers: [provideMockStore()],
     }).compileComponents();
   });
 

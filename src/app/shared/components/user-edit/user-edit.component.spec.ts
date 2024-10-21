@@ -20,18 +20,15 @@ describe('UserEditComponent', () => {
   let component: UserEditComponent;
   let fixture: ComponentFixture<UserEditComponent>;
   let dialogRefSpy: jasmine.SpyObj<MatDialogRef<UserEditComponent>>;
+
   const mockUser: User = {
     id: 1,
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@example.com',
-    birthDate: '1990-01-01',
+    dob: '1990-01-01',
     role: 'user',
-    age: 30,
-    gender: 'male',
-    phone: '123456789',
-    username: 'johndoe',
-    password: 'password',
+    status: 'Active',
   };
 
   beforeEach(async () => {
@@ -75,8 +72,9 @@ describe('UserEditComponent', () => {
       firstName: mockUser.firstName,
       lastName: mockUser.lastName,
       email: mockUser.email,
-      birthDate: new Date(mockUser.birthDate),
+      dob: new Date(mockUser.dob),
       role: mockUser.role,
+      status: mockUser.status,
     });
   });
 
@@ -93,8 +91,9 @@ describe('UserEditComponent', () => {
       firstName: 'Jane',
       lastName: mockUser.lastName,
       email: mockUser.email,
-      birthDate: new Date(mockUser.birthDate),
+      dob: new Date(mockUser.dob),
       role: mockUser.role,
+      status: mockUser.status,
     });
   });
 

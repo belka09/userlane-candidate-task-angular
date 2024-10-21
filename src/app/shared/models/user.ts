@@ -1,9 +1,9 @@
-export interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: 'admin' | 'moderator' | 'user';
-  status: 'Active' | 'Inactive' | 'Suspended';
-  dob: string;
+export class User {
+  id: number = 0;
+  firstName: string = '';
+  lastName: string = '';
+  email: string = '';
+  role: 'admin' | 'moderator' | 'user' = 'user';
+  status: 'Active' | 'Inactive' | 'Suspended' = 'Active';
+  dob: string = '';
 }

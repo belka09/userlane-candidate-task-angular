@@ -35,27 +35,19 @@ describe('ApiService', () => {
         id: 1,
         firstName: 'John',
         lastName: 'Doe',
-        age: 30,
-        gender: 'male',
         email: 'john.doe@example.com',
-        phone: '123-456-7890',
-        username: 'johndoe',
-        password: 'password123',
-        birthDate: '1993-01-01',
+        dob: '1993-01-01',
         role: 'user',
+        status: 'Active',
       },
       {
         id: 2,
         firstName: 'Jane',
         lastName: 'Doe',
-        age: 28,
-        gender: 'female',
         email: 'jane.doe@example.com',
-        phone: '123-456-7891',
-        username: 'janedoe',
-        password: 'password123',
-        birthDate: '1995-02-01',
+        dob: '1995-02-01',
         role: 'moderator',
+        status: 'Active',
       },
     ];
 
@@ -65,7 +57,7 @@ describe('ApiService', () => {
 
     const req = httpTestingController.expectOne(apiUrl);
     expect(req.request.method).toBe('GET');
-    req.flush({ users: mockUsers });
+    req.flush(mockUsers);
   });
 
   it('should get a user by ID', () => {
@@ -73,14 +65,10 @@ describe('ApiService', () => {
       id: 1,
       firstName: 'John',
       lastName: 'Doe',
-      age: 30,
-      gender: 'male',
       email: 'john.doe@example.com',
-      phone: '123-456-7890',
-      username: 'johndoe',
-      password: 'password123',
-      birthDate: '1993-01-01',
+      dob: '1993-01-01',
       role: 'user',
+      status: 'Active',
     };
 
     service.getUserById(1).subscribe((user) => {
@@ -92,20 +80,41 @@ describe('ApiService', () => {
     req.flush(mockUser);
   });
 
+  it('should create a new user', () => {
+    const newUser: Partial<User> = {
+      firstName: 'Alice',
+      lastName: 'Wonderland',
+      email: 'alice@example.com',
+      dob: '1990-12-01',
+      role: 'user',
+      status: 'Active',
+    };
+
+    const createdUser: User = {
+      id: 3,
+      ...newUser,
+    } as User;
+
+    service.createUser(newUser).subscribe((user) => {
+      expect(user).toEqual(createdUser);
+    });
+
+    const req = httpTestingController.expectOne(apiUrl);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(newUser);
+    req.flush(createdUser);
+  });
+
   it('should update a user', () => {
     const userId = 1;
     const mockUser: User = {
       id: userId,
       firstName: 'John',
       lastName: 'Doe',
-      age: 30,
-      gender: 'male',
       email: 'john.doe@example.com',
-      phone: '123-456-7890',
-      username: 'johndoe',
-      password: 'password123',
-      birthDate: '1993-01-01',
+      dob: '1993-01-01',
       role: 'user',
+      status: 'Active',
     };
     const updatedData: Partial<User> = { firstName: 'Johnny' };
     const updatedUser: User = { ...mockUser, ...updatedData };
@@ -118,5 +127,17 @@ describe('ApiService', () => {
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual(updatedData);
     req.flush(updatedUser);
+  });
+
+  it('should delete a user', () => {
+    const userId = 1;
+
+    service.deleteUser(userId).subscribe(() => {
+      expect().nothing();
+    });
+
+    const req = httpTestingController.expectOne(`${apiUrl}/${userId}`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null);
   });
 });

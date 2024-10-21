@@ -6,26 +6,16 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Store, StoreModule } from '@ngrx/store';
-import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { UserEditComponent } from '../user-edit/user-edit.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  selectAllUsers,
-  selectIsCached,
-} from 'src/app/core/store/users/users.selector';
-import { UsersActions } from 'src/app/core/store/users/users.action';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
+import { UserService } from 'src/app/core/services/user.service';
 import { User } from '../../models/user';
-import { By } from '@angular/platform-browser';
 
 describe('UsersTableComponent', () => {
   let component: UsersTableComponent;
   let fixture: ComponentFixture<UsersTableComponent>;
-  let store: MockStore;
-  let dialog: MatDialog;
+  let userService: jasmine.SpyObj<UserService>;
 
   const mockUsers: User[] = [
     {
@@ -33,17 +23,21 @@ describe('UsersTableComponent', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
-      birthDate: '1990-01-01',
+      dob: '1990-01-01',
       role: 'user',
-      age: 30,
-      gender: 'male',
-      phone: '123456789',
-      username: 'johndoe',
-      password: 'password',
+      status: 'Active',
     },
   ];
 
   beforeEach(async () => {
+    const userServiceSpy = jasmine.createSpyObj('UserService', [
+      'loadUsers',
+      'addUser',
+      'updateUser',
+      'deleteUser',
+      'generateNewId',
+    ]);
+
     await TestBed.configureTestingModule({
       imports: [
         CommonModule,
@@ -52,30 +46,26 @@ describe('UsersTableComponent', () => {
         MatSortModule,
         MatPaginatorModule,
         MatIconModule,
-        MatDialogModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         UsersTableComponent,
       ],
-      providers: [
-        provideMockStore({
-          initialState: {},
-          selectors: [
-            { selector: selectAllUsers, value: mockUsers },
-            { selector: selectIsCached, value: false },
-          ],
-        }),
-        { provide: MatDialog, useValue: { open: jasmine.createSpy() } },
-      ],
+      providers: [{ provide: UserService, useValue: userServiceSpy }],
     }).compileComponents();
 
-    store = TestBed.inject(MockStore);
-    dialog = TestBed.inject(MatDialog);
+    userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UsersTableComponent);
     component = fixture.componentInstance;
+
+    userService.users$ = of(mockUsers);
+
+    userService.loadUsers.and.callFake(() => {
+      component.updateTableData(mockUsers);
+    });
+
     fixture.detectChanges();
   });
 
@@ -83,11 +73,27 @@ describe('UsersTableComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should dispatch loadUsers action if data is not cached', () => {
-    const dispatchSpy = spyOn(store, 'dispatch');
-    store.overrideSelector(selectIsCached, false);
-    component.ngOnInit();
-    expect(dispatchSpy).toHaveBeenCalledWith(UsersActions.loadUsers());
+  it('should load users on initialization', () => {
+    expect(userService.loadUsers).toHaveBeenCalled();
+    expect(component.dataSource.data).toEqual(mockUsers);
+  });
+
+  it('should apply filter to the table', () => {
+    const input = 'John';
+    component.applyFilter({ target: { value: input } } as any);
+
+    const filteredData = component.dataSource.data.filter((user) =>
+      `${user.firstName} ${user.lastName} ${user.email} ${user.role}`
+        .toLowerCase()
+        .includes(input.toLowerCase())
+    );
+    expect(component.dataSource.filteredData).toEqual(filteredData);
+  });
+
+  it('should call userService.deleteUser when a user is removed', () => {
+    component.onRemove(mockUsers[0]);
+
+    expect(userService.deleteUser).toHaveBeenCalledWith(mockUsers[0].id);
   });
 
   it('should update table data when users are loaded', () => {

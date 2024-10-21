@@ -16,16 +16,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { UserEditComponent } from '../user-edit/user-edit.component';
-import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { UsersActions } from 'src/app/core/store/users/users.action';
-import {
-  selectAllUsers,
-  selectIsCached,
-} from 'src/app/core/store/users/users.selector';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { StatusColorPipe } from '../../pipes/status-color.pipe';
+import { UserService } from 'src/app/core/services/user.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-users-table',
@@ -64,24 +59,17 @@ export class UsersTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   users$: Observable<User[]> | undefined;
-  selectedUser$: Observable<User | undefined> | undefined;
 
   constructor(
     public dialog: MatDialog,
-    private store: Store,
+    private userService: UserService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.store.pipe(select(selectIsCached)).subscribe((isCached) => {
-      if (!isCached) {
-        this.store.dispatch(UsersActions.loadUsers());
-      }
-    });
+    this.userService.loadUsers();
 
-    this.users$ = this.store.pipe(select(selectAllUsers));
-
-    this.users$.subscribe((users) => {
+    this.userService.users$.subscribe((users) => {
       this.updateTableData(users);
     });
 
@@ -117,7 +105,7 @@ export class UsersTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         const updatedUser = { ...user, ...result };
-        this.store.dispatch(UsersActions.updateUser({ user: updatedUser }));
+        this.userService.updateUser(updatedUser);
       }
     });
   }
@@ -125,35 +113,22 @@ export class UsersTableComponent implements OnInit {
   public onAddUser(): void {
     const dialogRef = this.dialog.open(UserEditComponent, {
       panelClass: 'dialog-container',
-      data: { user: this.getEmptyUser() },
+      data: { user: new User() },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        const newUser = { ...result, id: this.generateNewId().toString() };
-        this.store.dispatch(UsersActions.addUser({ user: newUser }));
+        const newUser = {
+          ...result,
+          id: this.userService.generateNewId(this.dataSource.data).toString(),
+        };
+        this.userService.addUser(newUser);
       }
     });
   }
 
-  private getEmptyUser(): User {
-    return {
-      id: 0,
-      firstName: '',
-      lastName: '',
-      email: '',
-      role: 'user',
-      status: 'Active',
-      dob: '',
-    };
-  }
-
-  private generateNewId(): number {
-    return Math.max(...this.dataSource.data.map((user) => user.id)) + 1;
-  }
-
   public onRemove(user: User): void {
-    this.store.dispatch(UsersActions.deleteUser({ userId: user.id }));
+    this.userService.deleteUser(user.id);
   }
 
   public updateTableData(users: User[]): void {

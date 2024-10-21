@@ -4,6 +4,6 @@ export interface User {
   lastName: string;
   email: string;
   role: 'admin' | 'moderator' | 'user';
-  status: 'Active' | 'Inactive' | 'Pending' | 'Suspended';
+  status: 'Active' | 'Inactive' | 'Suspended';
   dob: string;
 }

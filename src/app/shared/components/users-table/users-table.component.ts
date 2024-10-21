@@ -24,6 +24,8 @@ import {
   selectIsCached,
 } from 'src/app/core/store/users/users.selector';
 import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
+import { StatusColorPipe } from '../../pipes/status-color.pipe';
 
 @Component({
   selector: 'app-users-table',
@@ -35,6 +37,8 @@ import { MatInputModule } from '@angular/material/input';
     MatSortModule,
     MatPaginatorModule,
     MatFormFieldModule,
+    MatChipsModule,
+    StatusColorPipe,
     MatIconModule,
     MatInputModule,
     UserEditComponent,
@@ -51,6 +55,7 @@ export class UsersTableComponent implements OnInit {
     'email',
     'birthDate',
     'role',
+    'status',
     'remove',
   ];
   dataSource = new MatTableDataSource<User>([]);

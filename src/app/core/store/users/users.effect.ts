@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, delay, map, mergeMap, of } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { UsersActions } from './users.action';
 
@@ -13,6 +13,7 @@ export class UsersEffects {
       ofType(UsersActions.loadUsers),
       mergeMap(() =>
         this.apiService.fetchUsers().pipe(
+          delay(1000),
           map((users) => UsersActions.loadUsersSuccess({ users })),
           catchError((error) =>
             of(UsersActions.loadUsersFailure({ error: error.message }))
@@ -27,6 +28,7 @@ export class UsersEffects {
       ofType(UsersActions.updateUser),
       mergeMap(({ user }) =>
         this.apiService.updateUser(user.id, user).pipe(
+          delay(1000),
           map((updatedUser) =>
             UsersActions.updateUserSuccess({ user: updatedUser })
           ),
@@ -43,6 +45,7 @@ export class UsersEffects {
       ofType(UsersActions.addUser),
       mergeMap(({ user }) =>
         this.apiService.createUser(user).pipe(
+          delay(1000),
           map(() => UsersActions.loadUsers()),
           catchError((error) =>
             of(UsersActions.addUserFailure({ error: error.message }))
@@ -57,6 +60,7 @@ export class UsersEffects {
       ofType(UsersActions.deleteUser),
       mergeMap(({ userId }) =>
         this.apiService.deleteUser(userId).pipe(
+          delay(1000),
           map(() => UsersActions.deleteUserSuccess({ userId })),
           catchError((error) =>
             of(UsersActions.deleteUserFailure({ error: error.message }))

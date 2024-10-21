@@ -35,3 +35,8 @@ export const selectIsCached = createSelector(
   selectUsersState,
   (state) => state.isCached
 );
+
+export const selectLoading = createSelector(
+  selectUsersState,
+  (state: UsersState) => state.loading
+);

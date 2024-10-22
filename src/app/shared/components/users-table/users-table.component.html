@@ -1,18 +1,20 @@
 <section class="user-table-container">
     <div class="header-wrapper">
-        <button mat-icon-button
-            class="add-button"
-            aria-label="Add new user"
-            (click)="onAddUser()">
-            <mat-icon>add</mat-icon>
-        </button>
         <mat-form-field class="search-field"
             appearance="outline">
             <mat-label>Search</mat-label>
             <input matInput
                 (keyup)="applyFilter($event)"
-                placeholder="Search by name, email or role">
+                placeholder="Search by name, email or role" />
         </mat-form-field>
+
+        <button mat-button
+            class="add-record-button"
+            aria-label="Add new user"
+            (click)="onAddUser()">
+            <mat-icon>add</mat-icon>
+            <span class="button-label">Add new record</span>
+        </button>
     </div>
     <div class="table-wrapper">
         <table mat-table
@@ -86,6 +88,7 @@
                     *matCellDef="let user"
                     style="width: 50px; text-align: center;">
                     <mat-chip highlighted
+                        class="chips"
                         [color]=" user.status | statusColor ">
                         {{user.status}}
                     </mat-chip>

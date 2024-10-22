@@ -9,16 +9,56 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
+    height: 40px;
 
-  .search-field {
-    @media (max-width: 600px) {
-      flex: 1;
+    @media (max-width: $breakpoint-tablet) {
+      gap: 5px;
     }
-  }
 
-  .add-button {
-    margin-left: 10px;
+    .search-field,
+    .add-record-button {
+      width: 300px;
+      border-radius: 8px;
+      height: 100%;
+    }
+
+    .add-record-button {
+      border: 1px solid;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .button-label {
+      display: inline-block;
+    }
+
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      height: 40px !important;
+    }
+
+    ::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+      top: 20px !important;
+    }
+
+    ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+      padding-top: 10px !important;
+    }
+
+    @media (max-width: $breakpoint-tablet) {
+      .add-record-button {
+        width: auto;
+      }
+
+      .search-field {
+        width: 90%;
+      }
+
+      .button-label {
+        display: none;
+      }
+    }
   }
 
   table {
@@ -28,21 +68,29 @@
     white-space: nowrap;
     overflow: auto;
     display: inline-table;
+    margin-top: $space-md;
 
-    @media (max-width: 600px) {
+    @media (max-width: $breakpoint-tablet) {
       display: inline-block;
     }
 
     th {
       font-weight: bold;
       text-align: left;
-      padding: 12px;
+      padding: $space-md;
       border-bottom: 2px solid $gray;
     }
 
     td {
-      padding: 12px;
+      padding: $space-md;
       border: 1px solid $gray;
+    }
+
+    .chips {
+      display: grid;
+      width: 100%;
+      justify-content: center;
+      text-align: center;
     }
   }
 }

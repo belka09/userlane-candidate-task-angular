@@ -1,0 +1,21 @@
+@mixin flex-responsive($direction-default, $direction-mobile) {
+    flex-direction: $direction-default;
+
+    @media (max-width: $breakpoint-tablet) {
+        flex-direction: $direction-mobile;
+    }
+}
+
+@mixin flex-row($gap-size) {
+    display: flex;
+    gap: $gap-size;
+}
+
+@mixin flex-size($grow, $shrink, $basis) {
+    flex: $grow $shrink $basis;
+}
+
+@mixin grid-layout($gap-size) {
+    display: grid;
+    gap: $gap-size;
+}

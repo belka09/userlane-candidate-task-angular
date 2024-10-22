@@ -1,48 +1,54 @@
 @import '/src/styles/styles.scss';
 
-mat-dialog-container {
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 100%;
-}
+.dialog {
+  &__container {
+    padding: $space-xl;
+    border-radius: $space-s;
+    max-width: 500px;
+    width: 100%;
+  }
 
-mat-dialog-content p {
-  margin-bottom: 10px;
-}
+  &__actions {
+    display: flex;
+    margin-top: 20px;
+    justify-content: flex-end;
+    gap: $space-md;
 
-mat-dialog-actions {
-  display: flex;
-  margin-top: 20px;
-  width: 50%;
-  margin-left: auto;
-
-  button {
-    min-width: 100px;
-    margin-left: 10px;
+    button {
+      min-width: 100px;
+    }
   }
 }
 
-.form-container {
-  display: grid;
-  gap: 16px;
-}
-
-.form-row {
-  display: flex;
-  gap: 16px;
-
-  .form-field {
-    flex: 1 1 50%;
+.form {
+  &__container {
+    @include grid-layout($space-lg);
   }
-}
 
-@media (max-width: 600px) {
-  .form-row {
-    flex-direction: column;
+  &__row {
+    @include flex-row($space-lg);
 
-    .form-field {
-      flex: 1 1 100%;
+    &__field {
+      @include flex-size(1, 1, 50%);
+    }
+  }
+
+  @media (max-width: $breakpoint-tablet) {
+    &__row {
+      @include flex-responsive(row, column);
+
+      &__field {
+        @include flex-size(1, 1, 100%);
+      }
+    }
+
+    .dialog__actions {
+      flex-direction: column;
+      width: 100%;
+
+      button {
+        width: 100%;
+      }
     }
   }
 }

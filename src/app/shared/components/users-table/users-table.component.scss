@@ -4,8 +4,8 @@
   width: 100%;
 }
 
-.user-table-container {
-  .header-wrapper {
+.user-table {
+  &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -15,14 +15,14 @@
       gap: 5px;
     }
 
-    .search-field,
-    .add-record-button {
+    .user-table__search-field,
+    .user-table__add-record {
       width: 300px;
       border-radius: 8px;
       height: 100%;
     }
 
-    .add-record-button {
+    .user-table__add-record {
       border: 1px solid;
       padding: 8px 16px;
       display: flex;
@@ -30,7 +30,7 @@
       align-items: center;
     }
 
-    .button-label {
+    .user-table__add-record-label {
       display: inline-block;
     }
 
@@ -47,50 +47,52 @@
     }
 
     @media (max-width: $breakpoint-tablet) {
-      .add-record-button {
+      .user-table__add-record {
         width: auto;
       }
 
-      .search-field {
+      .user-table__search-field {
         width: 90%;
       }
 
-      .button-label {
+      .user-table__add-record-label {
         display: none;
       }
     }
   }
 
-  table {
-    width: 100%;
-    height: 422px;
-    border-collapse: collapse;
-    white-space: nowrap;
-    overflow: auto;
-    display: inline-table;
-    margin-top: $space-md;
-
-    @media (max-width: $breakpoint-tablet) {
-      display: inline-block;
-    }
-
-    th {
-      font-weight: bold;
-      text-align: left;
-      padding: $space-md;
-      border-bottom: 2px solid $gray;
-    }
-
-    td {
-      padding: $space-md;
-      border: 1px solid $gray;
-    }
-
-    .chips {
-      display: grid;
+  &__table-wrapper {
+    table {
       width: 100%;
-      justify-content: center;
-      text-align: center;
+      height: 422px;
+      border-collapse: collapse;
+      white-space: nowrap;
+      overflow: auto;
+      display: inline-table;
+      margin-top: $space-md;
+
+      @media (max-width: $breakpoint-tablet) {
+        display: inline-block;
+      }
+
+      th {
+        font-weight: bold;
+        text-align: left;
+        padding: $space-md;
+        border-bottom: 2px solid $gray;
+      }
+
+      td {
+        padding: $space-md;
+        border: 1px solid $gray;
+      }
+
+      .user-table__chips {
+        display: grid;
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
     }
   }
 }

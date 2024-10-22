@@ -84,7 +84,7 @@ NgRx helps maintain a predictable application state and allows for easy tracking
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-repo/user-management-app.git
+   git clone https://github.com/belka09/userlane-candidate-task-angular
    cd user-management-app
    ```
 

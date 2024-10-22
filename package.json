@@ -2,8 +2,10 @@
   "name": "candidate-task-angular",
   "version": "1.0.0",
   "scripts": {
-    "start": "ng serve",
+    "start": "npm-run-all --parallel start:server wait-on-server start:frontend",
     "start:server": "json-server --watch db.json --port 3000",
+    "wait-on-server": "wait-on http://localhost:3000",
+    "start:frontend": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -42,6 +44,8 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "5.3.3"
+    "npm-run-all": "^4.1.5",
+    "typescript": "5.3.3",
+    "wait-on": "^8.0.1"
   }
 }
